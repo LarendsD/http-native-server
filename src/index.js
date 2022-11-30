@@ -1,6 +1,7 @@
 import http from 'http';
 import routes from './routes/routes.js';
 import db from './db/config.js';
+import validateBody from './validation/validation.js';
 
 const server = http.createServer((request, response) => {
   response.setHeader('content-type', 'application/json');
@@ -8,6 +9,11 @@ const server = http.createServer((request, response) => {
   request
     .on('data', (chunk) => {
       body = JSON.parse(chunk);
+      const errs = validateBody(body, request.method);
+      if (errs.length > 0) {
+        response.writeHead(400);
+        response.end(JSON.stringify(errs));
+      }
     })
     .on('end', () => {
       const { url, method } = request;
@@ -18,21 +24,21 @@ const server = http.createServer((request, response) => {
           return false;
         }
         const id = matches[1];
-        routes[path][method](request, response, db, body, id)
+        routes[path][method](request, response, db, body, id);
         return true;
-      })
+      });
 
       if (!result) {
         const notFoundErr = {
-          message: 'Not Found!'
-        }
+          message: 'Not Found!',
+        };
         response.writeHead(404);
         response.end(JSON.stringify(notFoundErr));
       }
     });
 });
 
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 server.listen(port, () => {
   db.connect();

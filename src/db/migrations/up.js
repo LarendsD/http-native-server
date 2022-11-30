@@ -9,7 +9,7 @@ const up = () => {
       name varchar(50),
       description varchar(255),
       expires timestamp,
-      is_ready boolean
+      is_ready boolean DEFAULT 'false'
     )`)
     .then(() => {
       console.log('Migration was completed!');

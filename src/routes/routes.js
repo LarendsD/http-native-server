@@ -10,64 +10,74 @@ export default {
   '/tasks': {
     GET: (req, res, db) => {
       db.query(
-        `SELECT * FROM tasks`
+        'SELECT * FROM tasks',
       )
-      .then((tasks) => {
-        res.end(JSON.stringify(tasks.rows))
-      })
+        .then((tasks) => {
+          res.end(JSON.stringify(tasks.rows));
+        });
     },
     POST: (req, res, db, body) => {
-      db.query(
-        `INSERT INTO tasks (name, description, expires, is_ready)
-        VALUES ('${body.name}', '${body.description}', '${body.expires}', '${body.is_ready}') RETURNING *`
+      const query = `
+      INSERT INTO tasks (
+        name, 
+        description, 
+        expires
+        ${body.is_ready ? ', is_ready' : ''}
       )
-      .then((newTask) => {
-        res.end(JSON.stringify(newTask.rows[0]));
-      })
-    }
+      VALUES (
+        '${body.name}',
+        '${body.description}', 
+        '${body.expires}'
+        ${body.is_ready ? `, '${body.is_ready}'` : ''}
+      )
+      RETURNING *;
+      `;
+      db.query(query)
+        .then((newTask) => {
+          res.end(JSON.stringify(newTask.rows[0]));
+        });
+    },
   },
   '/tasks/(\\d)': {
     GET: (req, res, db, body, id) => {
       db.query(
-        `SELECT * FROM tasks WHERE id='${id}'`
+        `SELECT * FROM tasks WHERE id='${id}'`,
       ).then((task) => {
-        res.end(JSON.stringify(task.rows[0]))
-      })
+        res.end(JSON.stringify(task.rows[0]));
+      });
     },
     PUT: (req, res, db, body, id) => {
       db.query(
-        `SELECT * FROM tasks WHERE id='${id}'`
+        `SELECT * FROM tasks WHERE id='${id}'`,
       )
-      .then((response) => {
-        const task = response.rows[0]
-        return {...task, ...body};
-      })
-      .then((updateBody) => {
-        return db.query(
+        .then((response) => {
+          const task = response.rows[0];
+          return { ...task, ...body };
+        })
+        .then((updateBody) => db.query(
           `UPDATE tasks SET 
           name='${updateBody.name}', description='${updateBody.description}', expires='${updateBody.expires}', is_ready='${updateBody.is_ready}'
           WHERE id='${id}'
-          RETURNING *`
-        )
-      })
-      .then((updatedTask) => {
-        res.end(JSON.stringify(updatedTask.rows[0]))
-      });
+          RETURNING *`,
+        ))
+        .then((updatedTask) => {
+          res.end(JSON.stringify(updatedTask.rows[0]));
+        });
     },
     DELETE: (req, res, db, body, id) => {
       let message;
       db.query(
-        `DELETE FROM tasks WHERE id='${id}'`
+        `DELETE FROM tasks WHERE id='${id}'`,
       )
-      .then(({ rowCount }) => {
-        if (rowCount === 0) {
-          message = { message: `Task ${id} was not found!`}
-          res.writeHead(404);
-        } else {
-          message = { message: `Task ${id} was deleted successfully!` }
-        }
-        res.end(JSON.stringify(message));
-      })
-    }
-  }
+        .then(({ rowCount }) => {
+          if (rowCount === 0) {
+            message = { message: `Task ${id} was not found!` };
+            res.writeHead(404);
+          } else {
+            message = { message: `Task ${id} was deleted successfully!` };
+          }
+          res.end(JSON.stringify(message));
+        });
+    },
+  },
 };
