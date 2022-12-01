@@ -2,7 +2,7 @@ export default {
   '/': {
     GET: (req, res) => {
       const response = {
-        message: 'Welcome to http native server, please, read the instructions on out Github and send request to this server',
+        message: 'Welcome to http native server, please, read the instructions on Github and send request to this server',
       };
       res.end(JSON.stringify(response));
     },

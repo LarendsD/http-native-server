@@ -6,7 +6,7 @@ import validateBody from './validation/validation.js';
 const server = http.createServer((request, response) => {
   response.setHeader('content-type', 'application/json');
   let body;
-  let errs;
+  let errs = [];
   request
     .on('data', (chunk) => {
       body = JSON.parse(chunk);
