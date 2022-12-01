@@ -46,6 +46,24 @@ Example of the body:
 DELETE /data/:id
 ```
 
+### In expires field supported
+#### Date formats:
+1. YYYY-MM-DD
+2. Month day, YYYY
+3. M/D/YYYY
+4. MM/DD/YY
+5. YYYY-MMM-DD
+6. MMM-DD-YYYY
+7. DD-MMM-YYYY
+8. DD-MMM-YY
+9. MMM-DD-YY
+
+#### Time formats:
+1. HH:MM:SS
+2. HH:MM
+3. HH:MM AM
+4. HH:MM PM
+
 ## Local deploy:
 1. Clone this repo:
 ```bash
