@@ -3,6 +3,7 @@ export default {
     GET: (req, res) => {
       const response = {
         message: 'Welcome to http native server, please, read the instructions on Github and send request to this server',
+        github: 'https://github.com/LarendsD/http-native-server',
       };
       res.end(JSON.stringify(response));
     },
