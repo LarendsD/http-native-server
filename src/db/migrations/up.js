@@ -8,7 +8,7 @@ const up = () => {
       id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
       name varchar(50),
       description varchar(255),
-      expires timestamp,
+      expires timestamptz,
       is_ready boolean DEFAULT 'false'
     )`)
     .then(() => {

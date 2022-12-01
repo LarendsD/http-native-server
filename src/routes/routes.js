@@ -18,19 +18,19 @@ export default {
     },
     POST: (req, res, db, body) => {
       const query = `
-      INSERT INTO tasks (
-        name, 
-        description, 
-        expires
-        ${body.is_ready ? ', is_ready' : ''}
-      )
-      VALUES (
-        '${body.name}',
-        '${body.description}', 
-        '${body.expires}'
-        ${body.is_ready ? `, '${body.is_ready}'` : ''}
-      )
-      RETURNING *;
+        INSERT INTO tasks (
+          name, 
+          description, 
+          expires
+          ${body.is_ready ? ', is_ready' : ''}
+        )
+        VALUES (
+          '${body.name}',
+          '${body.description}', 
+          '${body.expires}'
+          ${body.is_ready ? `, '${body.is_ready}'` : ''}
+        )
+        RETURNING *;
       `;
       db.query(query)
         .then((newTask) => {
@@ -52,6 +52,8 @@ export default {
       )
         .then((response) => {
           const task = response.rows[0];
+          const existingDate = new Date(task.expires);
+          task.expires = existingDate.toISOString();
           return { ...task, ...body };
         })
         .then((updateBody) => db.query(

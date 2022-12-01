@@ -6,34 +6,36 @@ import validateBody from './validation/validation.js';
 const server = http.createServer((request, response) => {
   response.setHeader('content-type', 'application/json');
   let body;
+  let errs;
   request
     .on('data', (chunk) => {
       body = JSON.parse(chunk);
-      const errs = validateBody(body, request.method);
+      errs = validateBody(body, request.method);
+    })
+    .on('end', () => {
       if (errs.length > 0) {
         response.writeHead(400);
         response.end(JSON.stringify(errs));
-      }
-    })
-    .on('end', () => {
-      const { url, method } = request;
-      const result = Object.keys(routes).find((path) => {
-        const regexp = new RegExp(`^${path}$`);
-        const matches = url.match(regexp);
-        if (!matches || !routes[path][method]) {
-          return false;
-        }
-        const id = matches[1];
-        routes[path][method](request, response, db, body, id);
-        return true;
-      });
+      } else {
+        const { url, method } = request;
+        const result = Object.keys(routes).find((path) => {
+          const regexp = new RegExp(`^${path}$`);
+          const matches = url.match(regexp);
+          if (!matches || !routes[path][method]) {
+            return false;
+          }
+          const id = matches[1];
+          routes[path][method](request, response, db, body, id);
+          return true;
+        });
 
-      if (!result) {
-        const notFoundErr = {
-          message: 'Not Found!',
-        };
-        response.writeHead(404);
-        response.end(JSON.stringify(notFoundErr));
+        if (!result) {
+          const notFoundErr = {
+            message: 'Not Found!',
+          };
+          response.writeHead(404);
+          response.end(JSON.stringify(notFoundErr));
+        }
       }
     });
 });

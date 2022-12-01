@@ -1,51 +1,37 @@
-const isValidName = (name) => {
-  const isValid = (typeof name === 'string' && name.length > 0 && name.length <= 50);
-  return isValid;
-};
-
-const isValidDescription = (description) => {
-  const isValid = (
-    typeof description === 'string' && description.length > 0 && description.length <= 255
-  );
-  return isValid;
-};
-
-const isValidDate = (date) => (!!new Date(date).getDate());
-
-const isBoolean = (bool) => {
-  const isBool = ((bool === 'false' || bool === 'true') || !bool);
-  return isBool;
-};
+import errMessages from './helpers/messages.js';
+import {
+  isBoolean, isName, isDescription, isDate,
+} from './helpers/checkers.js';
 
 export default (body, method) => {
   const errs = [];
   switch (method) {
     case 'POST':
-      if (!isValidName(body.name)) {
-        errs.push('Name must be string and have at least 1 symbol and 50 max symbols');
+      if (!isName(body.name)) {
+        errs.push(errMessages.name);
       }
-      if (!isValidDescription(body.description)) {
-        errs.push('Description must be string and have at least 1 symbol and 255 max symbols');
+      if (!isDescription(body.description)) {
+        errs.push(errMessages.description);
       }
       if (!isBoolean(body.is_ready)) {
-        errs.push('is_ready must be a boolean!');
+        errs.push(errMessages.is_ready);
       }
-      if (!isValidDate(body.expires)) {
-        errs.push('Expires must have a date!');
+      if (!isDate(body.expires)) {
+        errs.push(errMessages.expires);
       }
       return errs;
     case 'PUT':
-      if (!isValidName(body.name) && body.name) {
-        errs.push('Name must be string and have at least 1 symbol and 50 max symbols');
+      if (!isName(body.name) && body.name) {
+        errs.push(errMessages.name);
       }
-      if (!isValidDescription(body.description) && body.description) {
-        errs.push('Description must be string and have at least 1 symbol and 255 max symbols');
+      if (!isDescription(body.description) && body.description) {
+        errs.push(errMessages.description);
       }
       if (!isBoolean(body.is_ready) && body.is_ready) {
-        errs.push('is_ready must be a boolean!');
+        errs.push(errMessages.is_ready);
       }
-      if (!isValidDate(body.expires) && body.expires) {
-        errs.push('Expires must have a date!');
+      if (!isDate(body.expires) && body.expires) {
+        errs.push(errMessages.expires);
       }
       return errs;
     default:
