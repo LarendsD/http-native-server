@@ -1,9 +1,9 @@
-# http-native-server
-## API, which constucted on native instruments and pg client(PostGreSQL)
+# :zap: http-native-server :zap: 
+## :computer: API, which constucted on native instruments and pg client(PostGreSQL)
 
-# Available <a href="https://http-native-server-production.up.railway.app/">here</a>
+# :mag_right: Available <a href="https://http-native-server-production.up.railway.app/">here</a>
 
-## Routes:
+## :arrow_up: Routes:
 ### Get all tasks from database:
 ```bash
 GET /tasks
@@ -46,7 +46,7 @@ Example of the body:
 DELETE /data/:id
 ```
 
-### In expires field supported
+### :white_check_mark: In expires field supported
 #### Date formats:
 1. YYYY-MM-DD
 2. Month day, YYYY
@@ -64,7 +64,7 @@ DELETE /data/:id
 3. HH:MM AM
 4. HH:MM PM
 
-## Local deploy:
+## 💻 Local deploy:
 1. Clone this repo:
 ```bash
 git clone https://github.com/LarendsD/http-native-server
@@ -82,7 +82,7 @@ make setup
 make start
 ```
 
-## Other usefull commands:
+## :fire: Other usefull commands:
 ### Migrate DB:
 ```bash
 make db-migrate
