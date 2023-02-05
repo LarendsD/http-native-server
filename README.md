@@ -1,6 +1,8 @@
 # :zap: http-native-server :zap: 
 ## :computer: API, which constucted on native instruments and pg client(PostGreSQL)
 
+# :mag_right: Available <a href="https://http-native-server-production.up.railway.app/">here</a>
+
 ## :arrow_up: Routes:
 ### Get all tasks from database:
 ```bash
